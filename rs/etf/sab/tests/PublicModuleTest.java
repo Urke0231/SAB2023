@@ -44,7 +44,7 @@ public class PublicModuleTest
     
     @After
     public void tearDown() throws Exception {
-        this.generalOperations.eraseAll();
+       // this.generalOperations.eraseAll();
     }
     
     @Test
@@ -92,11 +92,15 @@ public class PublicModuleTest
         this.orderOperations.addArticle(order, stolica, 10);
         this.orderOperations.addArticle(order, sto, 4);
         Assert.assertNull((Object)this.orderOperations.getSentTime(order));
+        System.out.println("GETSENTTIME");
         Assert.assertTrue("created".equals(this.orderOperations.getState(order)));
         this.orderOperations.completeOrder(order);
         Assert.assertTrue("sent".equals(this.orderOperations.getState(order)));
+       
         final int buyerTransactionId = this.transactionOperations.getTransationsForBuyer(buyer).get(0);
+        System.out.println(initialTime+"\n"+this.transactionOperations.getTimeOfExecution(buyerTransactionId));
         Assert.assertEquals((Object)initialTime, (Object)this.transactionOperations.getTimeOfExecution(buyerTransactionId));
+        System.out.println("Transaction time");
         Assert.assertNull((Object)this.transactionOperations.getTransationsForShop(shopA));
         final BigDecimal shopAAmount = new BigDecimal("5").multiply(new BigDecimal("1000")).setScale(3);
         final BigDecimal shopAAmountWithDiscount = new BigDecimal("0.8").multiply(shopAAmount).setScale(3);
@@ -110,29 +114,53 @@ public class PublicModuleTest
         final BigDecimal shopAAmountReal = shopAAmountWithDiscount.multiply(new BigDecimal("0.95")).setScale(3);
         final BigDecimal shopC2AmountReal = shopC2AmountWithDiscount.multiply(new BigDecimal("0.95")).setScale(3);
         final BigDecimal shopC3AmountReal = shopC3AmountWithDiscount.multiply(new BigDecimal("0.95")).setScale(3);
+        System.out.println("PreProbaCenu"+amountWithDiscounts);
         Assert.assertEquals((Object)amountWithDiscounts, (Object)this.orderOperations.getFinalPrice(order));
+        System.out.println("PosleProbaCenu");
+        System.out.println("PreProbaCenu"+amountWithoutDiscounts);
         Assert.assertEquals((Object)amountWithoutDiscounts.subtract(amountWithDiscounts), (Object)this.orderOperations.getDiscountSum(order));
+        System.out.println("PosleProbaPopust");
         Assert.assertEquals((Object)amountWithDiscounts, (Object)this.transactionOperations.getBuyerTransactionsAmmount(buyer));
+        System.out.println("PosleProbaTransakciju BUYER");
+        System.out.println(this.transactionOperations.getShopTransactionsAmmount(shopA));
         Assert.assertEquals((Object)this.transactionOperations.getShopTransactionsAmmount(shopA), (Object)new BigDecimal("0").setScale(3));
+        System.out.println("PosleProbaTransakcijuA");
         Assert.assertEquals((Object)this.transactionOperations.getShopTransactionsAmmount(shopC2), (Object)new BigDecimal("0").setScale(3));
+        System.out.println("PosleProbaTransakcijuC2");
         Assert.assertEquals((Object)this.transactionOperations.getShopTransactionsAmmount(shopC3), (Object)new BigDecimal("0").setScale(3));
+        System.out.println("PosleProbaTransakciju C3");
         Assert.assertEquals((Object)new BigDecimal("0").setScale(3), (Object)this.transactionOperations.getSystemProfit());
+        System.out.println("SystemProfitProsao");
         this.generalOperations.time(2);
+        System.out.println(initialTime);
+        System.out.println(this.orderOperations.getSentTime(order));
         Assert.assertEquals((Object)initialTime, (Object)this.orderOperations.getSentTime(order));
+        System.out.println("Proslo Vreme");
+        
         Assert.assertNull((Object)this.orderOperations.getRecievedTime(order));
+        System.out.println("Proslo Vreme NULL");
         Assert.assertEquals((long)this.orderOperations.getLocation(order), (long)cityA);
         this.generalOperations.time(9);
+        System.out.println("cityA");
         Assert.assertEquals((long)this.orderOperations.getLocation(order), (long)cityA);
         this.generalOperations.time(8);
+        System.out.println("CityA");
         Assert.assertEquals((long)this.orderOperations.getLocation(order), (long)cityC5);
         this.generalOperations.time(5);
+        System.out.println("cityC5");
         Assert.assertEquals((long)this.orderOperations.getLocation(order), (long)cityB);
+        System.out.println("cityB");
         Assert.assertEquals((Object)receivedTime, (Object)this.orderOperations.getRecievedTime(order));
+        System.out.println("ReceivedTime");
+        System.out.println(shopAAmountReal);
+        System.out.println(this.transactionOperations.getShopTransactionsAmmount(shopA));
         Assert.assertEquals((Object)shopAAmountReal, (Object)this.transactionOperations.getShopTransactionsAmmount(shopA));
         Assert.assertEquals((Object)shopC2AmountReal, (Object)this.transactionOperations.getShopTransactionsAmmount(shopC2));
         Assert.assertEquals((Object)shopC3AmountReal, (Object)this.transactionOperations.getShopTransactionsAmmount(shopC3));
+        System.out.println("SistemProfit"+systemProfit);
         Assert.assertEquals((Object)systemProfit, (Object)this.transactionOperations.getSystemProfit());
         final int shopATransactionId = this.transactionOperations.getTransactionForShopAndOrder(order, shopA);
+        System.out.println("Tranzeksn id");
         Assert.assertNotEquals(-1L, (long)shopATransactionId);
         Assert.assertEquals((Object)receivedTime, (Object)this.transactionOperations.getTimeOfExecution(shopATransactionId));
     }

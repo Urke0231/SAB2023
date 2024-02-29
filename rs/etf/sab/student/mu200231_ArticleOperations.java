@@ -9,7 +9,7 @@ public class mu200231_ArticleOperations implements ArticleOperations {
 	@Override
 	public int createArticle(int p0, String p1, int p2) {
 		try(
-		PreparedStatement ps=connection.prepareStatement("INSERT INTO artikal(IdProd,Naziv,Cena) values(?,?,?,0)");
+		PreparedStatement ps=connection.prepareStatement("INSERT INTO artikal(IdProd,Naziv,Cena,kolicina) values(?,?,?,0)");
 		PreparedStatement ps1=connection.prepareStatement("Select * from artikal where idprod=? and Naziv=? and cena=?")
 		){
 			ps.setInt(1, p0);

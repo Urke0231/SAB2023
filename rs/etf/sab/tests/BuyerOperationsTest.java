@@ -41,6 +41,7 @@ public class BuyerOperationsTest
         Assert.assertNotEquals(-1L, (long)cityId);
         final int buyerId = this.buyerOperations.createBuyer("Pera", cityId);
         Assert.assertNotEquals(-1L, (long)buyerId);
+        System.out.println("KRAJ1");
     }
     
     @Test
@@ -51,6 +52,7 @@ public class BuyerOperationsTest
         this.buyerOperations.setCity(buyerId, cityId2);
         final int cityId3 = this.buyerOperations.getCity(buyerId);
         Assert.assertEquals((long)cityId2, (long)cityId3);
+        System.out.println("KRAJ2");
     }
     
     @Test
@@ -59,11 +61,13 @@ public class BuyerOperationsTest
         final int buyerId = this.buyerOperations.createBuyer("Pera", cityId);
         final BigDecimal credit1 = new BigDecimal("1000.000").setScale(3);
         BigDecimal creditReturned = this.buyerOperations.increaseCredit(buyerId, credit1);
+        System.out.println(credit1+" "+creditReturned);
         Assert.assertEquals((Object)credit1, (Object)creditReturned);
         final BigDecimal credit2 = new BigDecimal("500");
         this.buyerOperations.increaseCredit(buyerId, credit2).setScale(3);
         creditReturned = this.buyerOperations.getCredit(buyerId);
         Assert.assertEquals((Object)credit1.add(credit2).setScale(3), (Object)creditReturned);
+        System.out.println("KRAJ3");
     }
     
     @Test
@@ -72,10 +76,13 @@ public class BuyerOperationsTest
         final int buyerId = this.buyerOperations.createBuyer("Pera", cityId);
         final int orderId1 = this.buyerOperations.createOrder(buyerId);
         final int orderId2 = this.buyerOperations.createOrder(buyerId);
+        System.out.println(orderId1);
+        System.out.println(orderId2);
         Assert.assertNotEquals(-1L, (long)orderId1);
         Assert.assertNotEquals(-1L, (long)orderId2);
         final List<Integer> orders = (List<Integer>)this.buyerOperations.getOrders(buyerId);
         Assert.assertEquals(2L, (long)orders.size());
         Assert.assertTrue(orders.contains(orderId1) && orders.contains(orderId2));
+        System.out.println("KRAJ4");
     }
 }
